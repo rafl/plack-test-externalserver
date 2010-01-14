@@ -14,6 +14,22 @@ use LWP::UserAgent;
       PLACK_TEST_EXTERNALSERVER_URI=http://myhost.example/myapp/ \
       perl my_plack_test.t
 
+=head1 DESCRIPTION
+
+This module allows your to run your Plack::Test tests against an external
+server instead of just against a local application through either mocked HTTP
+or a locally spawned server.
+
+See L<Plack::Test> on how to write tests that can use this module.
+
+=head1 SEE ALSO
+
+L<Plack::Test>
+
+L<Plack::Test::Server>
+
+L<Plack::Test::MockHTTP>
+
 =cut
 
 sub test_psgi {
