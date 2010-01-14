@@ -20,13 +20,12 @@ test_tcp(
 
         local $ENV{PLACK_TEST_EXTERNALSERVER_URI} = "http://127.0.0.1:${port}/base";
 
-        test_psgi
-            client => sub {
-                my ($cb) = @_;
-                my $res = $cb->(GET '/moo');
-                ok($res->is_success);
-                is($res->content, '/base/moo');
-            };
+        test_psgi client => sub {
+            my ($cb) = @_;
+            my $res = $cb->(GET '/moo');
+            ok($res->is_success);
+            is($res->content, '/base/moo');
+        };
     },
     server => sub {
         my ($port) = @_;
