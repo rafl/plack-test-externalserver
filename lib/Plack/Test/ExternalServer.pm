@@ -16,13 +16,15 @@ sub test_psgi {
        $base   = URI->new($base) if $base;
 
     $client->(sub {
-        my ($req) = @_;
+        my ($req) = shift->clone;
 
         if ($base) {
-            $req->uri->scheme($base->scheme);
-            $req->uri->host($base->host);
-            $req->uri->port($base->port);
-            $req->uri->path($base->path . $req->uri->path);
+            my $uri = $req->uri->clone;
+            $uri->scheme($base->scheme);
+            $uri->host($base->host);
+            $uri->port($base->port);
+            $uri->path($base->path . $uri->path);
+            $req->uri($uri);
         }
 
         return $ua->request($req);
