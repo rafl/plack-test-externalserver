@@ -11,21 +11,21 @@ use HTTP::Request::Common;
 
 my $app = sub {
     my ($env) = @_;
-    return [ 200, ['Content-Type' => 'text/plain'], ['moo'] ];
+    return [ 200, ['Content-Type' => 'text/plain'], [$env->{REQUEST_URI}] ];
 };
 
 test_tcp(
     client => sub {
         my ($port) = @_;
 
-        local $ENV{PLACK_TEST_EXTERNALSERVER_URI} = "http://127.0.0.1:${port}";
+        local $ENV{PLACK_TEST_EXTERNALSERVER_URI} = "http://127.0.0.1:${port}/base";
 
         test_psgi
             client => sub {
                 my ($cb) = @_;
-                my $res = $cb->(GET '/');
+                my $res = $cb->(GET '/moo');
                 ok($res->is_success);
-                is($res->content, 'moo');
+                is($res->content, '/base/moo');
             };
     },
     server => sub {
