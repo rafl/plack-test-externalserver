@@ -14,7 +14,7 @@ my $app = sub {
     return [ 200, ['Content-Type' => 'text/plain'], [$env->{REQUEST_URI}] ];
 };
 
-test_tcp(
+test_tcp
     client => sub {
         my ($port) = @_;
 
@@ -42,7 +42,6 @@ test_tcp(
         my ($port) = @_;
         my $server = Plack::Loader->auto(port => $port, host => '127.0.0.1');
         $server->run($app);
-    },
-);
+    };
 
 done_testing;

@@ -22,6 +22,17 @@ or a locally spawned server.
 
 See L<Plack::Test> on how to write tests that can use this module.
 
+=head1 ENVIRONMENT VARIABLES
+
+=over 4
+
+=item PLACK_TEST_EXTERNALSERVER_URI
+
+The value of this variable will be used as the base uri for requests to the
+external server.
+
+=back
+
 =head1 SEE ALSO
 
 L<Plack::Test>
