@@ -41,6 +41,12 @@ L<Plack::Test::Server>
 
 L<Plack::Test::MockHTTP>
 
+=begin Pod::Coverage
+
+test_psgi
+
+=end Pod::Coverage
+
 =cut
 
 sub test_psgi {
