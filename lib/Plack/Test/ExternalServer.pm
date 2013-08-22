@@ -49,28 +49,30 @@ test_psgi
 
 =cut
 
-sub test_psgi {
-    my %args = @_;
+sub new {
+    my($class, $app, %args) = @_;
+    bless { app => $app, %args }, $class;
+}
 
-    my $client = delete $args{client} or croak 'client test code needed';
-    my $ua     = delete $args{ua} || LWP::UserAgent->new;
-    my $base   = $ENV{PLACK_TEST_EXTERNALSERVER_URI} || delete $args{uri};
-       $base   = URI->new($base) if $base;
+sub request {
+    my($self, $req) = @_;
 
-    $client->(sub {
-        my ($req) = shift->clone;
+    $req = $req->clone;
 
-        if ($base) {
-            my $uri = $req->uri->clone;
-            $uri->scheme($base->scheme);
-            $uri->host($base->host);
-            $uri->port($base->port);
-            $uri->path($base->path . $uri->path);
-            $req->uri($uri);
-        }
+    my $base = $ENV{PLACK_TEST_EXTERNALSERVER_URI} || $self->{uri};
+       $base = URI->new($base) if $base;
 
-        return $ua->request($req);
-    });
+    if ($base) {
+        my $uri = $req->uri->clone;
+        $uri->scheme($base->scheme);
+        $uri->host($base->host);
+        $uri->port($base->port);
+        $uri->path($base->path . $uri->path);
+        $req->uri($uri);
+    }
+
+    my $ua = $self->{ua} || LWP::UserAgent->new;
+    return $ua->request($req);
 }
 
 1;
